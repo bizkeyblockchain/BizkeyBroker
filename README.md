@@ -212,12 +212,18 @@ goodslist格式示例及说明：
 ```
     {
 	"status": true,
-	"code": 0
-}
+	"code": 0,
+	"data":{
+            "confirm_url":"https://trade-api.bizkey.io/index.php?c=page&m=confirm_order&order_sn=5bb0e57a2b07a2b0235bb0e57a2b"
+        }
+    }
+    
+    confirm_url是订单确认地址，需要推送给用户打开确认才可以挖矿。
+    
 ```
 
 
-#### 6.生成网页H5钱包访问的token
+#### 6.生成网关接口（H5页面）访问的token
 
 参数 | 必填 | 说明
   ---|---|---
@@ -235,6 +241,27 @@ m |Y |authToken
 		"user_id": "bzky_5b5e8797dd0af5b5e8797dd0fc"
 	}
 }
+```
+
+#### 7. H5版Bizkey钱包（H5）
+```
+升级中，敬请期待
+```
+
+
+#### 8.订单确认挖矿（H5）
+
+参数 | 必填 | 说明
+  ---|---|---
+ user_id| Y | Bizkey的User_id
+token | Y | 接口6生成的访问token
+appid | Y | 分配的Appid
+```
+接口5（上传新订单接口）返回的 confirm_url
+拼接上商户的user_id、token、appid 然后让商户打开进行确认挖矿。
+
+建议先跳第三方自己的地址获取token后再http302转跳到此挖矿确认页。
+
 ```
 
 
