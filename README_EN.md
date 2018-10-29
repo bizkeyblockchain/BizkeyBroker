@@ -262,7 +262,7 @@ Section 5 (Upload New Order interface) returns the Confirm_url. Concatenate it w
 
 It is recommended to redirect to your own address to get the token before using http302 to redirect to the mining confirmation page.
 
-
+```
 
 
 # Appendix：
@@ -282,7 +282,7 @@ United States Dollar | USD
 Indonesian Rupiah | IDR
 
 
- #### Payment method
+#### Payment method
 
 payment id | Payment method
 -- | --
