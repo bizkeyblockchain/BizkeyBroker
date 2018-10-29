@@ -10,6 +10,7 @@ Added supported currencies and countries (IDR|IDN)
 
 
 Public parameter(compulsory)
+
 Parameter | Description
 ---|---
 timestamp | Timestamp of request
