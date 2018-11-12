@@ -214,11 +214,13 @@ goodslist格式示例及说明：
 	"status": true,
 	"code": 0,
 	"data":{
-            "confirm_url":"https://trade-api.bizkey.io/index.php?c=page&m=confirm_order&order_sn=5bb0e57a2b07a2b0235bb0e57a2b"
+            "confirm_url":"https://trade-api.bizkey.io/index.php?c=page&m=confirm_order&order_sn=5bb0e57a2b07a2b0235bb0e57a2b",
+            "time_reward_url":"https://trade-api.kizkey.io/index.php?c=page&m=time_reward&order_sn=5bb0e57a2b07a2b0235bb0e57a2b"
         }
     }
     
     confirm_url是订单确认地址，需要推送给用户打开确认才可以挖矿。
+	time_reward_url是消费者端订单挖矿确认页，消费者点开确认可获得TIME。
     
 ```
 
@@ -245,7 +247,7 @@ m |Y |authToken
 
 #### 7. H5版Bizkey钱包（H5）
 ```
-升级中，敬请期待
+升级中，暂未开放
 ```
 
 
@@ -257,12 +259,52 @@ m |Y |authToken
 token | Y | 接口6生成的访问token
 appid | Y | 分配的Appid
 ```
-接口5（上传新订单接口）返回的 confirm_url
-拼接上商户的user_id、token、appid 然后让商户打开进行确认挖矿。
+接口5（上传新订单接口）返回的 confirm_url、time_reward_url
+拼接上用户的user_id、token、appid 然后让商户/消费者打开进行确认挖矿。
+消费者获得TIME、商户获得BZKY
 
 建议先跳第三方自己的地址获取token后再http302转跳到此挖矿确认页。
 
 ```
+
+#### 9.消息回调通知
+```
+用户获得BZKY或者其他动作完成后，Bizkey钱包会把相关信息发送给接入平台，平台需要接收处理，并返回应答。
+
+对后台通知交互时，如果接入方平台收到回调通知的应答不是成功或超时，Bizkey钱包认为通知失败，钱包会通过一定的策略定期重新发起通知，尽可能提高通知的成功率，但不保证通知最终能成功。
+
+提醒：接入方系统对于回调通知的内容一定要做签名验证,防止数据泄漏导致出现“假通知”。
+
+回调地址：接入方平台提供。
+
+请求方式：POST
+
+应答内容：SUCCESS
+
+```
+
+参数 | 必填 | 说明
+  ---|---|---
+appid| Y | Bizkey分配的APPID
+timestamp | Y | 时间戳
+signature | Y | 数据签名
+msgtype | Y | 消息类型
+msg_id | Y | 消息ID（唯一）
+msg | Y | 消息说明
+coin_code | N | 币种代号： BZKY、TIME
+user_id | N | 用户ID
+amount | N | 资产变动数量
+trade_time | N | 交易发生时间（时间戳）
+order_amount | N |  订单金额
+
+```
+msgtype 说明
+ORDER_CONFIRM ：用户确认订单挖矿
+
+回调参数会因msgtype的类型不一样而变化，上述参数在ORDER_CONFIRM类型都会存在。
+
+```
+
 
 
 
