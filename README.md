@@ -324,6 +324,7 @@ SGD | 新加坡元
 THB | 泰铢 
 USD | 美元
 IDR | 印尼卢比 
+TWD | 新台币
 
 
  #### 支付方式
@@ -346,6 +347,7 @@ payment id | 支付方式
 -- | --
 CAN | 加拿大
 CHN | 中国
+TWN | 中国台湾
 JPN | 日本
 KOR | 韩国
 MAS | 马拉西亚
