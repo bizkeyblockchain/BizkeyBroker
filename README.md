@@ -221,6 +221,7 @@ goodslist格式示例及说明：
     
     confirm_url是订单确认地址，需要推送给用户打开确认才可以挖矿。
 	time_reward_url是消费者端订单挖矿确认页，消费者点开确认可获得TIME。
+	具体访问方式及样例请查看 “8.订单确认挖矿（H5）”
     
 ```
 
@@ -264,6 +265,9 @@ appid | Y | 分配的Appid
 消费者获得TIME、商户获得BZKY
 
 建议先跳第三方自己的地址获取token后再http302转跳到此挖矿确认页。
+
+商户挖矿确认样例：
+https://trade-api.bizkey.io/index.php?c=page&m=confirm_order&order_sn=5bb0e57a2b07a2b0235bb0e57a2b&token=421f6779950ec13976b8a6d8d469b57e&user_id=bzky_5b5e8797dd0af5b5e8797dd0fc&appid=TS0001
 
 ```
 
