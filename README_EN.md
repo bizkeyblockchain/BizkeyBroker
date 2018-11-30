@@ -1,16 +1,16 @@
-﻿# BZKY API #
+# BZKY API #
 Changelog
-Added mining confirmation.
+Added mining confirmation for both merchant and customer.
 Section 5 is modified.
-Added section 6-8.
-Added supported currencies and countries (IDR|IDN)
+Added section 9.
+Added example to section 8.
+Added supported currencies and countries (TWD|TWN)
 
 
 ###### Public parameters and error code description
 
 
 Public parameter(compulsory)
-
 Parameter | Description
 ---|---
 timestamp | Timestamp of request
@@ -213,16 +213,22 @@ Example and description of goodslist format:
 
 - Return Example
 ```
-    {
+{
 	"status": true,
 	"code": 0
 	```
 "data":{
             "confirm_url":"https://trade-api.bizkey.io/index.php?c=page&m=confirm_order&order_sn=5bb0e57a2b07a2b0235bb0e57a2b"
+            "time_reward_url":"https://trade-api.kizkey.io/index.php?c=page&m=time_reward&order_sn=5bb0e57a2b07a2b0235bb0e57a2b"
+       }
+
+```
 ```
 }
 
-confirm_url is the link to confirm the order, it needs to be pushed to user for mining to be completed. 
+confirm_url is the link to confirm the order, it needs to be pushed to the merchant for mining to be completed. 
+time_reward_url is the link for consumer to confirm the order, only when confirmed they will be able to get TIME.
+For more information and example please refer to "Section 8. Order confirmation (H5)"
 ```
 
 
@@ -244,11 +250,11 @@ m |Y |authToken
 		"user_id": "bzky_5b5e8797dd0af5b5e8797dd0fc"
 	}
 }
-
+```
 #### 7. H5(website) Bizkey wallet
 Development in progress, stay tuned.
 
-#### 8. Generating token for accessing H5(website) wallet
+#### 8. Order confirmation (H5)
 
 Parameter | Mandatory  | Description
   ---|---|---
@@ -258,11 +264,43 @@ appid| Y | Assigned AppId.
 
 
 ```
-Section 5 (Upload New Order interface) returns the Confirm_url. Concatenate it with merchant's user_id, token, appID and let the merchant to confirm the transaction to initiate the mining.
+Section 5 (Upload New Order interface) returns the confirm_url and time_reward_url. Concatenate it with merchant's user_id, token, appID and let the merchant/customer to confirm the transaction to initiate the mining.
 
 It is recommended to redirect to your own address to get the token before using http302 to redirect to the mining confirmation page.
 
+Example of merchant's mining confirmation:
+
+https://trade-api.bizkey.io/index.php?c=page&m=confirm_order&order_sn=5bb0e57a2b07a2b0235bb0e57a2b&token=421f6779950ec13976b8a6d8d469b57e&user_id=bzky_5b5e8797dd0af5b5e8797dd0fc&appid=TS0001
 ```
+#### 9.Message Callback Notification
+```
+When the user gets Bzky or other actions are completed, the Bizkey wallet sends the relevant information to the Partner's platform, which needs to process and return.
+
+When interacting with background notifications, if the Partner's platform receives a callback notification that the answer is not successful or has timed out, the Bizkey Wallet will treat is as the notification failed. The wallet periodically resends the notification through a certain strategy to maximize the success rate of sending the notification, but does not guarantee that the sending of notification will eventually succeed.
+
+Reminder: The Partner's system for the contents of the callback notification must perform signature verification, to prevent data leakage caused by the occurrence of "fake notification."
+
+Callback address: Provided by the Partner's platform.
+
+Request Method: POST 
+Answer content: SUCCESS
+
+```
+
+Parameter | Mandatory  | Description
+  ---|---|---
+appid |Y |Merchants' assigned AppID
+timestamp| Y | Timestamp
+signature| Y | Signature of data
+msgtype| Y | Type of data
+msg_id| Y | ID of message (must be unique)
+msg| Y | Content of message
+coin_code| N | Type of coin:BZKY/TIME
+user_id| N | User's ID (both merchant and customer)
+amount| N | Amount of coin received
+trade_time| N | Timestamp of the transaction occuring (same as "pay_time" in section 5)
+order_amount| N | Amount of the transaction
+
 
 
 # Appendix：
@@ -270,7 +308,7 @@ It is recommended to redirect to your own address to get the token before using 
  #### Currency code
 
 Currency | Code
--- | --
+--- | ---
 Canadian Dollar | CAD
 Chinese Yuan | CNY
 Japanese Yen | JPY
@@ -280,9 +318,10 @@ Singapore Dollar | SGD
 Thai Bhat | THB
 United States Dollar | USD
 Indonesian Rupiah | IDR
+New Taiwan Dollar | TWD
 
 
-#### Payment method
+ #### Payment method
 
 payment id | Payment method
 -- | --
@@ -302,6 +341,7 @@ ID | Country
 -- | --
 CAN | Canada
 CHN | China
+TWN | Taiwan 
 JPN | Japan
 KOR | Korea
 MAS | Malaysia
